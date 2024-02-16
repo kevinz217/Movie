@@ -1,5 +1,7 @@
 import com.sun.jdi.VMOutOfMemoryException;
 
+import javax.management.ObjectName;
+import java.awt.dnd.DragGestureEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,16 +9,20 @@ import java.util.Scanner;
 
 public class MovieCollection {
     private ArrayList<Movie> movieArrayList;
+    private ArrayList<String> actorList;
     private Scanner scanner;
 
     public MovieCollection() {
         movieArrayList = new ArrayList<Movie>();
+        actorList = new ArrayList<String>();
         loadMoviesInto();
         sortMovies();
         for (int i = 0; i < movieArrayList.size(); i++) {
-            System.out.println(movieArrayList.get(i).getName());
+            System.out.println(movieArrayList.get(i).getName() + " " + i);
         }
         scanner = new Scanner(System.in);
+
+        // menu();
     }
 
     public void menu() {
@@ -54,14 +60,14 @@ public class MovieCollection {
 
     public void sortMovies() {
         for (int i = 1; i < movieArrayList.size(); i++) {
-            String name = movieArrayList.get(i).getName();
+            Movie current = movieArrayList.get(i);
+            String name = current.getName();
             int innerIdx = i;
-            String otherName = movieArrayList.get(innerIdx - 1).getName();
-            while (innerIdx > 0 && name.compareTo(otherName) < 0) {
+            while (innerIdx > 0 && name.compareTo(movieArrayList.get(innerIdx - 1).getName()) < 0) {
                 movieArrayList.set(innerIdx, movieArrayList.get(innerIdx - 1));
                 innerIdx--;
             }
-            movieArrayList.set(innerIdx, movieArrayList.get(innerIdx));
+            movieArrayList.set(innerIdx, current);
         }
     }
 
@@ -69,6 +75,7 @@ public class MovieCollection {
         try {
             File myFile = new File("src\\movies_data.csv");
             Scanner fileScanner = new Scanner(myFile);
+            fileScanner.nextLine();
             while (fileScanner.hasNext()) {
                 String data = fileScanner.nextLine();
                 String name = data.substring(0, data.indexOf(","));
