@@ -22,7 +22,7 @@ public class MovieCollection {
         }
         scanner = new Scanner(System.in);
 
-        // menu();
+        menu();
     }
 
     public void menu() {
@@ -51,7 +51,38 @@ public class MovieCollection {
     }
 
     public void searchTitles() {
+        System.out.print("Enter search term: ");
+        String choice = scanner.nextLine();
+        ArrayList<Movie> sortedList = new ArrayList<Movie>();
 
+        //gets every movie with the character
+        for (Movie movie : movieArrayList) {
+            String movieName = movie.getName().toLowerCase();
+            if (movieName.indexOf(choice) != -1) {
+                sortedList.add(movie);
+            }
+        }
+
+        //prints out each movie
+        for (int i = 0; i < sortedList.size(); i++) {
+            System.out.println(i + 1 + ". " + sortedList.get(i).getName());
+        }
+
+        int movieChoice = -1;
+
+        while (!(movieChoice >= 0 && movieChoice < sortedList.size())) {
+            System.out.print("Which movie would you like to learn more about? ");
+            movieChoice = scanner.nextInt();
+            scanner.nextLine();
+        }
+        Movie selectedMovie = sortedList.get(movieChoice - 1);
+
+        System.out.println("\nName: " + selectedMovie.getName());
+        System.out.println("Runtime: " + selectedMovie.getRuntime() + " minutes");
+        System.out.println("Directed by: " + selectedMovie.getDirector());
+        System.out.println("Cast: " + selectedMovie.getCast());
+        System.out.println("Overview: " + selectedMovie.getOverview());
+        System.out.println("User rating: " + selectedMovie.getUserRating() + "\n");
     }
 
     public void searchCast() {
